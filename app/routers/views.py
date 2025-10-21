@@ -2,6 +2,7 @@ from fastapi import APIRouter, Request, Query
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from datetime import date
+from datetime import datetime
 from app.services import get_all_expenses, get_summary
 
 router = APIRouter()
@@ -21,8 +22,19 @@ def homepage(request: Request, category: str | None = Query(None), start: str | 
         expenses = [e for e in expenses if e.date <= end_date]
     summary = get_summary(start=start_date, end=end_date)
     categories = sorted({e.category for e in get_all_expenses()})
-    return templates.TemplateResponse("index.html", {"request": request, "expenses": expenses, "summary": summary, "categories": categories})
-
+    # return templates.TemplateResponse("index.html", {"request": request, "expenses": expenses, "summary": summary, "categories": categories})
+    
+    
+    return templates.TemplateResponse(
+    "index.html",
+    {
+        "request": request,
+        "expenses": expenses,
+        "summary": summary,
+        "categories": categories,
+        "now": datetime.now,  # ✅ add this line
+    },
+)
 @router.get("/summary_page", response_class=HTMLResponse)
 def summary_page(request: Request, start: str | None = None, end: str | None = None):
     start_date = date.fromisoformat(start) if start else None

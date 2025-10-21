@@ -16,21 +16,64 @@ templates = Jinja2Templates(directory="app/templates")
 # ensure DB present
 init_db()
 
+# @router.post("/add_expense")
+# async def api_add_expense(amount: float = Form(...),
+#                           category: str = Form(...),
+#                           date_str: str = Form(...),
+#                           description: Optional[str] = Form(None)):
+#     """
+#     Accepts form-data and inserts into DB. date_str format: YYYY-MM-DD
+#     """
+#     try:
+#         d = date.fromisoformat(date_str)
+#     except Exception as e:
+#         raise HTTPException(status_code=400, detail="Invalid date format. Use YYYY-MM-DD")
+#     expense = Expense(amount=round(float(amount), 2), category=category, date=d, description=description)
+#     res = add_expense(expense)
+#     # redirect to homepage
+#     return RedirectResponse(url="/", status_code=303)
+
 @router.post("/add_expense")
-async def api_add_expense(amount: float = Form(...),
-                          category: str = Form(...),
-                          date_str: str = Form(...),
-                          description: Optional[str] = Form(None)):
+async def api_add_expense(
+    amount: float = Form(...),
+    currency: str = Form(...),
+    category: str = Form(...),
+    date_str: str = Form(...),
+    description: Optional[str] = Form(None)
+):
     """
-    Accepts form-data and inserts into DB. date_str format: YYYY-MM-DD
+    Accepts form-data and inserts into DB with currency conversion.
     """
+    from datetime import date
+    exchange_rates = {
+        "INR": 1.0,
+        "USD": 83.0,
+        "EUR": 90.0,
+        "GBP": 105.0,
+        "JPY": 0.55,
+        "AED": 22.6,
+    }
+
     try:
         d = date.fromisoformat(date_str)
-    except Exception as e:
+    except Exception:
         raise HTTPException(status_code=400, detail="Invalid date format. Use YYYY-MM-DD")
-    expense = Expense(amount=round(float(amount), 2), category=category, date=d, description=description)
-    res = add_expense(expense)
-    # redirect to homepage
+
+    if d > date.today():
+        raise HTTPException(status_code=400, detail="Date cannot be in the future")
+
+    # Convert to INR
+    rate = exchange_rates.get(currency.upper(), 1.0)
+    amount_inr = round(float(amount) * rate, 2)
+
+    expense = Expense(
+        amount=amount_inr,
+        category=category,
+        date=d,
+        description=description
+    )
+
+    add_expense(expense)
     return RedirectResponse(url="/", status_code=303)
 
 @router.get("/expenses")

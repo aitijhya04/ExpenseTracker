@@ -19,6 +19,21 @@ def get_all_expenses():
         expenses = session.exec(select(Expense)).all()
         return expenses
 
+# def get_summary(start: Optional[date] = None, end: Optional[date] = None):
+#     with Session(engine) as session:
+#         query = select(Expense)
+#         if start:
+#             query = query.where(Expense.date >= start)
+#         if end:
+#             query = query.where(Expense.date <= end)
+#         expenses = session.exec(query).all()
+
+#         total = sum(e.amount for e in expenses)
+#         summary = {}
+#         for e in expenses:
+#             summary[e.category] = summary.get(e.category, 0) + e.amount
+#         return {"total": total, "by_category": summary}
+
 def get_summary(start: Optional[date] = None, end: Optional[date] = None):
     with Session(engine) as session:
         query = select(Expense)
@@ -30,7 +45,11 @@ def get_summary(start: Optional[date] = None, end: Optional[date] = None):
 
         total = sum(e.amount for e in expenses)
         summary = {}
+        monthly = {}
+
         for e in expenses:
             summary[e.category] = summary.get(e.category, 0) + e.amount
-        return {"total": total, "by_category": summary}
+            ym = e.date.strftime("%Y-%m")
+            monthly[ym] = monthly.get(ym, 0) + e.amount
 
+        return {"total": total, "by_category": summary, "by_month": monthly, "count": len(expenses)}

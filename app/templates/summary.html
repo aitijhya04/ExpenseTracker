@@ -1,20 +1,92 @@
 {% extends "base.html" %}
 {% block content %}
-  <h2>Summary Page</h2>
-  <form method="get" action="/summary_page">
-    <label>Start: <input type="date" name="start" value="{{ start or '' }}"></label>
-    <label>End: <input type="date" name="end" value="{{ end or '' }}"></label>
-    <button type="submit">Apply</button>
-  </form>
+<h1 style="text-align:center; margin-bottom:1.5rem;">Summary</h1>
 
-  <div class="summary">
-    <p>Total Spend: <strong>₹{{ "%.2f"|format(summary.total) }}</strong></p>
-    <p>Transactions: {{ summary.count }}</p>
-    <h3>Category-wise</h3>
-    <ul>
-      {% for k, v in summary.by_category.items() %}
-        <li>{{ k }} — ₹{{ "%.2f"|format(v) }}</li>
-      {% endfor %}
-    </ul>
-  </div>
+<form method="get" action="/summary_page" style="text-align:center; margin-bottom:2rem;">
+  <label>Start: <input type="date" name="start" value="{{ start or '' }}"></label>
+  <label>End: <input type="date" name="end" value="{{ end or '' }}"></label>
+  <button type="submit" style="margin-top: 10px;">Apply</button>
+</form>
+
+<!-- Total Spend -->
+<div style="text-align:center; margin-bottom:2rem;">
+  <p style="font-size:2rem; font-weight:700; color:#2563eb;">Total Spends: ₹{{ "%.2f"|format(summary.total) }}</p>
+  <p style="font-size:1.5rem;"">Transactions: {{ summary.count if summary.count is defined else '-' }}</p>
+</div>
+
+<!-- Category Cards -->
+<div class="category-cards" style="display:flex; flex-wrap:wrap; justify-content:center; gap:1rem; margin-bottom:2rem;">
+  {% for cat, amt in summary.by_category.items() %}
+    <div class="card">
+      <img src="{{ url_for('static', path='icons/' + cat|lower|replace(' ', '_') + '.png') }}" alt="{{ cat }}" width="40" onerror="this.style.display='none'">
+      <h4>{{ cat }}</h4>
+      <p>₹{{ "%.2f"|format(amt) }}</p>
+    </div>
+  {% endfor %}
+</div>
+
+<!-- Pie Chart -->
+<div class="chart-container" style="display:flex; justify-content:center; margin-bottom:2rem;">
+  <canvas id="categoryPie" width="400" height="400"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const ctx = document.getElementById('categoryPie').getContext('2d');
+const data = {
+  labels: {{ summary.by_category.keys() | list | tojson }},
+  datasets: [{
+    data: {{ summary.by_category.values() | list | tojson }},
+    backgroundColor: ['#2563eb','#16a34a','#dc2626','#f59e0b','#0ea5e9','#8b5cf6','#14b8a6','#ec4899','#6b7280','#f97316'],
+    borderWidth: 1
+  }]
+};
+
+new Chart(ctx, {
+  type: 'pie',
+  data: data,
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: 'bottom' },
+      title: { display: true }
+    }
+  }
+});
+</script>
+
+<style>
+.category-cards {
+  /* flex container handled inline */
+}
+
+.card {
+  width: 120px;
+  height: 150px; /* fixed height */
+  background: #f9fafb;
+  border-radius: 12px;
+  text-align: center;
+  padding: 12px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.chart-container {
+  /* flex container handled inline */
+}
+
+canvas {
+  max-width: 400px;
+  max-height: 400px;
+}
+
+@media (max-width:768px) {
+  .category-cards {
+    flex-wrap: wrap;
+  }
+}
+</style>
 {% endblock %}
