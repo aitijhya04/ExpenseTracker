@@ -1,4 +1,4 @@
-# 💰 ExpenseTracker
+## 💰 ExpenseTracker
 
 A simple expense tracking web application built with **FastAPI**, **SQLModel**, and **SQLite**.  
 You can add, view, and summarize expenses by category.
@@ -30,7 +30,7 @@ You can add, view, and summarize expenses by category.
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/<your-username>/expense-tracker.git
+   git clone https://github.com/<your-username>/ExpenseTracker.git
    cd expense-tracker
    
 2. **Install Dependencies**
@@ -41,7 +41,7 @@ You can add, view, and summarize expenses by category.
    ```python
    uvicorn app.main:app --reload
 
-4. Open in Browser
+4. **Open in Browser**
    👉 http://127.0.0.1:8000
 
 ## 🌐 Endpoints Overview
@@ -53,6 +53,6 @@ You can add, view, and summarize expenses by category.
 | `/add_expense`       | POST       | Submit a new expense             |
 | `/summary_page`      | GET        | Expense summary page             |
 
-👨‍💻 Author : Aitijhya Mondal
+## 👨‍💻 Author : Aitijhya Mondal
 Developed as part of a project using FastAPI, SQLite and HTML + Jinja2.
 
