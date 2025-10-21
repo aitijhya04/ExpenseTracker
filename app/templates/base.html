@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Expense Tracker</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Expense Tracker</h1>
+      <nav>
+        <a href="/">Home</a> |
+        <a href="/summary_page">Summary</a> |
+        <a href="/api/export">Export CSV</a>
+      </nav>
+    </header>
+    <main>
+      {% block content %}{% endblock %}
+    </main>
+    <footer>
+      <small>Built with FastAPI & Jinja2 • Local SQLite</small>
+    </footer>
+  </div>
+</body>
+</html>

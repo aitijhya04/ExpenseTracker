@@ -1,0 +1,11 @@
+[project]
+name = "expense-tracker"
+version = "0.1.0"
+dependencies = [
+  "fastapi",
+  "uvicorn[standard]",
+  "sqlmodel",
+  "jinja2",
+  "python-dotenv",
+  "pydantic"
+]

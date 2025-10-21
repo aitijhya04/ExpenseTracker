@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Summary Page</h2>
+  <form method="get" action="/summary_page">
+    <label>Start: <input type="date" name="start" value="{{ start or '' }}"></label>
+    <label>End: <input type="date" name="end" value="{{ end or '' }}"></label>
+    <button type="submit">Apply</button>
+  </form>
+
+  <div class="summary">
+    <p>Total Spend: <strong>₹{{ "%.2f"|format(summary.total) }}</strong></p>
+    <p>Transactions: {{ summary.count }}</p>
+    <h3>Category-wise</h3>
+    <ul>
+      {% for k, v in summary.by_category.items() %}
+        <li>{{ k }} — ₹{{ "%.2f"|format(v) }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}

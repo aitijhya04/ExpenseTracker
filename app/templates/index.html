@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+  <section class="form-section">
+    <h2>Add Expense</h2>
+    <form method="post" action="/api/add_expense">
+      <label>Amount (₹): <input required name="amount" type="number" step="0.01"></label>
+      <label>Category: <input required name="category" type="text" placeholder="e.g. Food"></label>
+      <label>Date: <input required name="date_str" type="date" value="{{ (now().date()) if False else '' }}"></label>
+      <label>Description: <input name="description" type="text"></label>
+      <button type="submit">Add</button>
+    </form>
+  </section>
+
+  <section class="filter-section">
+    <h3>Filters</h3>
+    <form method="get" action="/">
+      <label>Category:
+        <select name="category">
+          <option value="">All</option>
+          {% for c in categories %}
+          <option value="{{ c }}">{{ c }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label>Start: <input type="date" name="start"></label>
+      <label>End: <input type="date" name="end"></label>
+      <button type="submit">Apply</button>
+    </form>
+  </section>
+
+  <section class="summary">
+    <h2>Summary</h2>
+    <p>Total Spend: <strong>₹{{ "%.2f"|format(summary.total) }}</strong></p>
+    <p>Transactions: {{ summary.count }}</p>
+    <ul>
+      {% for cat, amt in summary.by_category.items() %}
+        <li>{{ cat }}: ₹{{ "%.2f"|format(amt) }}</li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <section class="table-section">
+    <h2>All Expenses</h2>
+    <table>
+      <thead><tr><th>#</th><th>Amount</th><th>Category</th><th>Date</th><th>Description</th><th>Added at</th></tr></thead>
+      <tbody>
+        {% for e in expenses %}
+        <tr>
+          <td>{{ e.id }}</td>
+          <td>₹{{ "%.2f"|format(e.amount) }}</td>
+          <td>{{ e.category }}</td>
+          <td>{{ e.date }}</td>
+          <td>{{ e.description or '' }}</td>
+          <td>{{ e.created_at.strftime("%Y-%m-%d %H:%M:%S") }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+{% endblock %}
