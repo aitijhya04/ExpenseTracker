@@ -53,6 +53,7 @@ You can add, view, and summarize expenses by category.
 | `/add_expense`       | POST       | Submit a new expense             |
 | `/summary_page`      | GET        | Expense summary page             |
 
-## 👨‍💻 Author : Aitijhya Mondal
-Developed as part of a project using FastAPI, SQLite and HTML + Jinja2.
+
+👨‍💻 Author : Aitijhya Mondal
+Made with ❤️ using FastAPI, SQLite and HTML + Jinja2.
 
