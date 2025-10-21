@@ -26,34 +26,30 @@ You can add, view, and summarize expenses by category.
 
 ---
 
-## 🗂️ Project Structure
-expense-tracker/
-│
-├── app/
-│ ├── main.py # FastAPI entry point
-│ ├── models.py # SQLModel for Expense
-│ ├── services.py # Database logic
-│ ├── routers/
-│ │ ├── expenses.py # API routes for expenses
-│ │ └── views.py # Routes for HTML pages
-│ ├── templates/
-│ │ ├── index.html
-│ │ ├── add_expense.html
-│ │ └── summary.html
-│ └── static/ # (Optional) CSS/JS files
-│
-├── requirements.txt # Python dependencies
-├── pyproject.toml # (Optional) project metadata
-├── README.md # Project documentation
-└── venv/ # Virtual environment (not uploaded)
-
-
----
-
 ## ⚙️ Setup Instructions
 
 1. **Clone the repository**
    ```bash
    git clone https://github.com/<your-username>/expense-tracker.git
    cd expense-tracker
+   
+2. **Install Dependencies**
+   ```python
+   pip install -r requirements.txt
 
+3. **Run the Application**
+   ```python
+   uvicorn app.main:app --reload
+
+4. Open in Browser
+   👉 http://127.0.0.1:8000
+
+🌐 Endpoints Overview
+Route	Method	Description
+/	GET	Home page (list all expenses)
+/add_expense_page	GET	Form to add a new expense
+/add_expense	POST	Submit a new expense
+/summary_page	GET	Expense summary page
+
+👨‍💻 Author
+Aitijhya Mondal
