@@ -44,12 +44,15 @@ You can add, view, and summarize expenses by category.
 4. Open in Browser
    👉 http://127.0.0.1:8000
 
-🌐 Endpoints Overview
-Route	Method	Description
-/	GET	Home page (list all expenses)
-/add_expense_page	GET	Form to add a new expense
-/add_expense	POST	Submit a new expense
-/summary_page	GET	Expense summary page
+## 🌐 Endpoints Overview
 
-👨‍💻 Author
-Aitijhya Mondal
+| **Route**            | **Method** | **Description**                  |
+|----------------------|------------|----------------------------------|
+| `/`                  | GET        | Home page (list all expenses)    |
+| `/add_expense_page`  | GET        | Form to add a new expense        |
+| `/add_expense`       | POST       | Submit a new expense             |
+| `/summary_page`      | GET        | Expense summary page             |
+
+👨‍💻 Author : Aitijhya Mondal
+Developed as part of a project using FastAPI, SQLite and HTML + Jinja2.
+
